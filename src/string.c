@@ -12,11 +12,10 @@ typedef struct
 
 String_view sv_new(char string[])
 {   
-    String_view new_string;
-    new_string.data = string;
-    new_string.count = (int)strlen(string);
-
-    return new_string;
+    return (String_view) {
+        string,
+        (int)strlen(string) 
+    };
 }
 
 void sv_pop_left(String_view *string, int pop_length)
@@ -130,11 +129,10 @@ String_view sv_replace(String_view *sv, int replace_idx, char new_char)
 
     buffer[replace_idx] = new_char;
 
-    String_view new_string;
-    new_string.data = buffer;
-    new_string.count = sv->count;
-
-    return new_string;
+    return (String_view) {
+        buffer, 
+        sv->count 
+    };
 }
 
 String_view sv_split(String_view *sv, int idx)
@@ -144,9 +142,10 @@ String_view sv_split(String_view *sv, int idx)
         return sv_new("");
     }
 
-    String_view new_string;
-    new_string.data = sv->data + idx;
-    new_string.count = sv->count - idx;
+    String_view new_string = {
+        sv->data + idx,
+        sv->count - idx
+    };
 
     sv_pop_right(sv, sv->count - idx);
     return new_string;
@@ -162,11 +161,12 @@ String_view sv_decimite(String_view *sv, char delimiter)
     {
         return sv_new("");  
     }
-
+    
     // Initialize new string
-    String_view new_string; 
-    new_string.data = sv->data + split_index + 1;
-    new_string.count = sv->count - split_index + 1;
+    String_view new_string = {
+        sv->data + split_index + 1,
+        sv->count - split_index + 1
+    };
 
     // Right pop old string to delimiter
     sv_pop_right(sv, sv->count - split_index);
