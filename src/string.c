@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdbool.h>
 
+
 typedef struct 
 {
     const char *data;
@@ -176,4 +177,25 @@ String_view sv_decimite(String_view *sv, char delimiter)
 int sv_length(String_view *sv)
 {
     return sv->count;
+}
+
+void sv_cstring(char *buffer, int buffer_size, String_view *sv)
+{
+    if (!buffer || !buffer_size || !sv || !sv->data || !sv->count)
+    {
+        return;
+    }
+
+    if (buffer_size == 0)
+    {
+        return;
+    }
+
+    int idx;
+    for (idx = 0; idx < buffer_size - 1 && idx < sv->count; idx++)
+    {
+        buffer[idx] = sv->data[idx];
+    }
+
+    buffer[idx] = '\0';
 }
